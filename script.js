@@ -46,6 +46,7 @@ function parseAmount(s) {
 }
 
 function loadCsvText(csvText) {
+  setStatus ( "made it ")
   const rows = Papa.parse(csvText.trim(), { skipEmptyLines: true }).data;
   const startIdx = rows.length && isNaN(parseAmount(rows[0][COL.DEBIT])) ? 1 : 0;
   const txns = [];
@@ -368,6 +369,7 @@ function nextWordAfter(marker, desc) {
 
 
 function assignCategory(idx) {
+  setStatus ( "im in assign cat")
   const txn = CURRENT_TXNS[idx];
   if (!txn) return;
   const desc = txn.description || "";
@@ -450,10 +452,12 @@ function escapeHtml(s) {
 
 // UI wiring
 document.getElementById('csvFile').addEventListener('change', (e) => {
+  setStatus ( " oooh movement ")
   const file = e.target.files?.[0]; if (!file) return;
   const reader = new FileReader();
   reader.onload = () => { loadCsvText(reader.result); };
   reader.readAsText(file);
+  setStatus ( " I read it ")
 });
 document.getElementById('recalculateBtn').addEventListener('click', applyRulesAndRender);
 document.getElementById('exportRulesBtn').addEventListener('click', exportRules);
