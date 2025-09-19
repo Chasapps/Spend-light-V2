@@ -9,6 +9,24 @@ let CURRENT_FILTER = null; // category filter
 let MONTH_FILTER = "";     // 'YYYY-MM' or ''
 let CURRENT_PAGE = 1;
 const PAGE_SIZE = 10;
+/** Simple helper to show a status message in the header */
+function setStatus(msg, level = "info") {
+  try {
+    const el = document.getElementById("appStatus");
+    if (!el) return;  // Do nothing if the span isn't in the DOM
+    el.textContent = String(msg || "");
+    // Change colour based on level
+    if (level === "error") {
+      el.style.color = "crimson";
+    } else if (level === "ok") {
+      el.style.color = "green";
+    } else {
+      el.style.color = "";
+    }
+  } catch (err) {
+    console.error("Failed to set status:", err);
+  }
+}
 
 function formatMonthLabel(ym) {
   if (!ym) return 'All months';
@@ -46,7 +64,7 @@ function parseAmount(s) {
 }
 
 function loadCsvText(csvText) {
-  setStatus ( "made it ")
+  setStatus ( "made it ");
   const rows = Papa.parse(csvText.trim(), { skipEmptyLines: true }).data;
   const startIdx = rows.length && isNaN(parseAmount(rows[0][COL.DEBIT])) ? 1 : 0;
   const txns = [];
@@ -369,7 +387,7 @@ function nextWordAfter(marker, desc) {
 
 
 function assignCategory(idx) {
-  setStatus ( "im in assign cat")
+  setStatus ( "im in assign cat");
   const txn = CURRENT_TXNS[idx];
   if (!txn) return;
   const desc = txn.description || "";
@@ -452,7 +470,7 @@ function escapeHtml(s) {
 
 // UI wiring
 document.getElementById('csvFile').addEventListener('change', (e) => {
-  setStatus ( " oooh movement ")
+  setStatus ( " oooh movement ");
   const file = e.target.files?.[0]; if (!file) return;
   const reader = new FileReader();
   reader.onload = () => { loadCsvText(reader.result); };
